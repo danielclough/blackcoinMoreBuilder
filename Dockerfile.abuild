@@ -1,0 +1,10 @@
+FROM blackmore-abase as build
+FROM alpine
+RUN apk update && apk add boost boost-filesystem \
+            boost-program_options \
+            boost-system boost-thread busybox db-c++ \
+            libevent libgcc libressl-dev \ 
+            libstdc++ musl
+COPY --from=build /blackcoin-more/src/blackmored /usr/local/bin
+COPY --from=build /blackcoin-more/src/blackmore-cli /usr/local/bin
+EXPOSE 15714/tcp

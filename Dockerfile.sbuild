@@ -1,0 +1,12 @@
+FROM blackmore-ubase as build
+
+RUN echo "In build stage"
+
+FROM scratch
+COPY --from=build /blackcoin-more/src/blackmored /
+COPY --from=build /blackcoin-more/src/blackmore-cli /
+
+# Expose the port for the RPC interface
+EXPOSE 15714/tcp
+
+CMD ["blackmored"]
