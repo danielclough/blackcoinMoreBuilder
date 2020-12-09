@@ -1,6 +1,10 @@
-FROM blackmore-ubase as build
+FROM blackcoinnl/blackmore-ubase-x86_64:v2.13.2.7 as build
 
-RUN echo "In build stage"
+RUN echo "Building Ubuntu Package"
+
+#
+# Collect dependencies
+#
 
 FROM ubuntu
 ENV TZ=America/Los_Angeles
@@ -17,7 +21,12 @@ RUN apt-get update && \
 #
 COPY --from=build /blackcoin-more/src/blackmored /usr/local/bin
 COPY --from=build /blackcoin-more/src/blackmore-cli /usr/local/bin
+COPY --from=build /usr/bin/bc /usr/bin
+COPY --from=build /usr/bin/jq /usr/bin
+
+
 #
 # Expose the port for the RPC interface
 #
+
 EXPOSE 15714/tcp
