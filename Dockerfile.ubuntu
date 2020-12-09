@@ -1,4 +1,4 @@
-FROM blackcoinnl/blackmore-ubase-x86_64:v2.13.2.7 as build
+FROM blackcoinnl/blackmore-ubase-x86_64:master as build
 
 RUN echo "Building Ubuntu Package"
 
