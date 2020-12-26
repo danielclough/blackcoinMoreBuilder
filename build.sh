@@ -2,23 +2,24 @@
 
 BASE_DIR=$(dirname $(realpath $0 ))
 Alist="\n
-\t \t \t \t aarch64-linux-gnu \n
-\t \t \t \t arm-linux-gnueabihf \n
-\t \t \t \t x86_64-linux-gnu \n
+\t \t \t \t aarch64-linux-gnu \t (eg. Raspi4 with Ubuntu) \n
+\t \t \t \t arm-linux-gnueabihf \t (eg. Other Raspi) \n
+\t \t \t \t x86_64-linux-gnu \t (aka. Linux AMD64) \n
 "
 
-usage="Usage: \n \t 
-\`build.sh -o <architecture> <DockerHub> <HubLab> <repository> <branch> <timezone>\` \t for option mode. \n \n
-\t \t \t \t \t \t \t \t \t \t \`build.sh -i\` \t for interactive mode. \n \n
-\t \t \t \t \t \t \t \t \t \t \`build.sh -h\` \t for help mode. \n \n
+usage="Usage: \n 
+\t option mode: \t \`build.sh -o <architecture> <DockerHub> <HubLab> <repository> <branch> <timezone>\` \n
+\t interactive: \t \`build.sh -i\` \n 
+\t \t \t help: \t \`build.sh -h\` \n 
+\n Architectures: ${Alist} \n
 "
 
-h1="<architecture> Choose one of the following: ${Alist}"
-h2="<DockerHub> \t Enter your Docker Hub account name."
-h3="<HubLab> \t Enter \`github\` or \`gitlab\`."
+h1="<architecture>  \t Choose your architecture. ${Alist}"
+h2="<DockerHub> \t \t Enter your Docker Hub account name."
+h3="<HubLab> \t \t \t Enter \`github\` or \`gitlab\`."
 h4="<repository> \t Enter the repository name."
-h5="<branch> \t Enter the branch name."
-h6="<timezone> \t Enter your timezone."
+h5="<branch> \t \t \t Enter the branch name."
+h6="<timezone> \t \t Enter your timezone."
 
 help="
 \n $h1 \n
