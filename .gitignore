@@ -4,3 +4,4 @@ arm-linux-gnueabihf/arm-linux-gnueabihf/*
 arm-linux-gnueabihf/parts/*
 x86_64-linux-gnu/x86_64-linux-gnu/*
 x86_64-linux-gnu/parts/*
+depends.tar.xz
