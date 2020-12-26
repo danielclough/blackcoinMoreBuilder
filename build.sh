@@ -8,16 +8,16 @@ Alist="\n
 "
 
 usage="Usage: \n 
-\t option mode: \t \`build.sh -o <architecture> <DockerHub> <HubLab> <repository> <branch> <timezone>\` \n
+\t option mode: \t \`build.sh -o <architecture> <DockerHub> <HubLab> <GitAccount> <branch> <timezone>\` \n
 \t interactive: \t \`build.sh -i\` \n 
 \t \t \t help: \t \`build.sh -h\` \n 
 \n Architectures: ${Alist} \n
 "
 
 h1="<architecture>  \t Choose your architecture. ${Alist}"
-h2="<DockerHub> \t \t Enter your Docker Hub account name."
-h3="<HubLab> \t \t \t Enter \`github\` or \`gitlab\`."
-h4="<repository> \t Enter the repository name."
+h2="<DockerHub> \t \t Enter your Docker Hub Account name."
+h3="<HubLab> \t \t \t Enter \"github\" or \"gitlab\"."
+h4="<GitAccount> \t Enter the git account name. (eg. \"CoinBlack\" on GitHub, or \"blackcoin\" on GitLab)"
 h5="<branch> \t \t \t Enter the branch name."
 h6="<timezone> \t \t Enter your timezone."
 
@@ -99,11 +99,11 @@ if [ $HubLab != $defaultHubLab ]; then
 fi
 
 defaultRepo=${5:-CoinBlack}
-read -p "What is your repository name? ($defaultRepo): " repository
-repository=${repository:-${defaultRepo}}
-if [ ${repository} != ${defaultRepo} ]; then
-	sed -i "s|CoinBlack|$repository|" ${BASE_DIR}/Dockerfile.ubase
-	sed -i "s|CoinBlack|$repository|" $0
+read -p "What is your GitAccount name? ($defaultRepo): " GitAccount
+GitAccount=${GitAccount:-${defaultRepo}}
+if [ ${GitAccount} != ${defaultRepo} ]; then
+	sed -i "s|CoinBlack|$GitAccount|" ${BASE_DIR}/Dockerfile.ubase
+	sed -i "s|CoinBlack|$GitAccount|" $0
 fi
 
 # branch
@@ -129,7 +129,7 @@ fi
 
 echo "Architecture: ${architecture}"
 echo "DockerHub Account: ${DockerHub}"
-echo "repository Account: ${HubLab}.com/${repository} ${branch}"
+echo "Git Account: ${HubLab}.com/${GitAccount} ${branch}"
 echo ${timezone}
 
 # build ubase-base
