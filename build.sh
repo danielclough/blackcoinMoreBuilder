@@ -73,21 +73,21 @@ else
 	wget -O ${BASE_DIR}/depends-${architecture}.tar.xz https://admin.blackcoin.nl/static/depends-${architecture}.tar.xz > /dev/null
 
 	case $architecture in
-	aarch64-linux-gnu)
-		checkSUM=`echo "f6f1b099d876db90396d0d56eb5b3f366f14c90e077524e2b10bfdaaa1aa5805 ${BASE_DIR}/depends-${architecture}.tar.xz" | sha256sum --check | awk '{print $2}' 2> /dev/null`
-		[[ "${checkSUM}" != "OK" ]] && echo 'SHASUM FAIL' && exit 1
-		tar xJf ${BASE_DIR}/depends-${architecture}.tar.xz -C ${BASE_DIR}
-	;;
-	arm-linux-gnueabihf)
-		checkSUM=`echo "339c1159adcccecb45155b316f1f5772009b92acb8cfed29464dd7f09775fb79 ${BASE_DIR}/depends-${architecture}.tar.xz" | sha256sum --check | awk '{print $2}' 2> /dev/null`
-		[[ "${checkSUM}" != "OK" ]] && echo 'SHASUM FAIL' && exit 1
-		tar xJf ${BASE_DIR}/depends-${architecture}.tar.xz -C ${BASE_DIR}
-	;;
-	x86_64-linux-gnu)
-		checkSUM=`echo "eed063b26f4c4e0fa35dc085fe09bafd4251cffa76cdabb26bf43077da03b84e ${BASE_DIR}/depends-${architecture}.tar.xz" | sha256sum --check | awk '{print $2}' 2> /dev/null`
-		[[ "${checkSUM}" != "OK" ]] && echo 'SHASUM FAIL' && exit 1
-		tar xJf ${BASE_DIR}/depends-${architecture}.tar.xz -C ${BASE_DIR}
-	;;
+		aarch64-linux-gnu)
+			checkSUM=`echo "f6f1b099d876db90396d0d56eb5b3f366f14c90e077524e2b10bfdaaa1aa5805 ${BASE_DIR}/depends-${architecture}.tar.xz" | sha256sum --check | awk '{print $2}' 2> /dev/null`
+			[[ "${checkSUM}" == "OK" ]] && 	echo "The sha256sum is OK! You will need sudo to untar the dependencies." && sudo tar xJf ${BASE_DIR}/depends-${architecture}.tar.xz -C ${BASE_DIR} \
+				|| (>&2 echo 'SHASUM FAIL'; exit 1)
+		;;
+		arm-linux-gnueabihf)
+			checkSUM=`echo "339c1159adcccecb45155b316f1f5772009b92acb8cfed29464dd7f09775fb79 ${BASE_DIR}/depends-${architecture}.tar.xz" | sha256sum --check | awk '{print $2}' 2> /dev/null`
+			[[ "${checkSUM}" == "OK" ]] && 	echo "The sha256sum is OK! You will need sudo to untar the dependencies." && sudo tar xJf ${BASE_DIR}/depends-${architecture}.tar.xz -C ${BASE_DIR} \
+				|| (>&2 echo 'SHASUM FAIL'; exit 1)
+		;;
+		x86_64-linux-gnu)
+			checkSUM=`echo "eed063b26f4c4e0fa35dc085fe09bafd4251cffa76cdabb26bf43077da03b84e ${BASE_DIR}/depends-${architecture}.tar.xz" | sha256sum --check | awk '{print $2}' 2> /dev/null`
+			[[ "${checkSUM}" == "OK" ]] && 	echo "The sha256sum is OK! You will need sudo to untar the dependencies." && sudo tar xJf ${BASE_DIR}/depends-${architecture}.tar.xz -C ${BASE_DIR} \
+				|| (>&2 echo 'SHASUM FAIL'; exit 1)
+		;;
 	esac
 	echo -e "
 	Dependencies SHA256SUM GOOD!
