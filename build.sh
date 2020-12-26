@@ -18,10 +18,12 @@ h1="<architecture>  \t Choose your architecture. ${Alist}"
 h2="<DockerHub> \t \t Enter your Docker Hub Account name."
 h3="<HubLab> \t \t \t Enter \"github\" or \"gitlab\"."
 h4="<GitAccount> \t Enter the git account name. (eg. \"CoinBlack\" on GitHub, or \"blackcoin\" on GitLab)"
-h5="<branch> \t \t \t Enter the branch name."
-h6="<timezone> \t \t Enter your timezone."
+h5="<branch> \t \t \t Enter the branch name. (eg. master)"
+h6="<timezone> \t \t Enter your timezone. (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)"
 
-help="
+help=" \n
+\t The defaults in interactive mode, written in for option mode: \n
+build.sh -o x86_64-linux-gnu blackcoinnl github CoinBlack v2.13.2.7 America/Los_Angeles \n
 \n $h1 \n
 \n $h2 \n
 \n $h3 \n
@@ -38,17 +40,32 @@ case $1 in
 
 -i|-o)
 
+# Questions for Interactive Mode
+
+defaultARCH=${2:-x86_64-linux-gnu}
+defaultDockerHub=${3:-blackcoinnl}
+defaultHubLab=${4:-github}
+defaultRepo=${5:-CoinBlack}
+defaultBranch=${6:-v2.13.2.7}
+defaultTimezone=${7:-America/Los_Angeles}
+if [[ $1 == -i ]]; then
+	echo -e ${Alist}
+	read -p "For what architecture would you like to build? ($defaultARCH): " architecture
+	read -p "What is your DockerHub Account Name? ($defaultDockerHub): " DockerHub
+	read -p "Github or Gitlab? ($defaultHubLab): " HubLab
+	read -p "What is your GitAccount name? ($defaultRepo): " GitAccount
+	read -p "What branch/version? ($defaultBranch): " branch
+	read -p "What is your timezone? (${defaultTimezone}): " timezone
+else
+	echo "Option Mode:"
+fi
 
 # Architecture
 
-defaultARCH=${2:-x86_64-linux-gnu}
-echo -e ${Alist}
-read -p "For what architecture would you like to build? ($defaultARCH): " architecture
 architecture=${architecture:-${defaultARCH}}
-if [ ${architecture} != ${defaultARCH} ]; then
-	sed -i "s/-x86_64-linux-gnu/-${architecture}/" $0
-fi
+[[ ${architecture} != ${defaultARCH} ]] &&	sed -i "s/-x86_64-linux-gnu/-${architecture}/" $0
 
+# Download Dependencies
 
 if [[ -f ${BASE_DIR}/depends-${architecture}.tar.xz ]]; then
 	echo "Dependencies exist!" 
@@ -77,55 +94,29 @@ else
 	"
 fi
 
-
-
 # DockerHub Account
 
-defaultDockerHub=${3:-blackcoinnl}
-read -p "What is your DockerHub Account Name? ($defaultDockerHub): " DockerHub
 DockerHub=${DockerHub:-${defaultDockerHub}}
-if [ $DockerHub != $defaultDockerHub ]; then
-	sed -i "s/blackcoinnl/$DockerHub/" $0
-fi
+[[ $DockerHub != ${defaultDockerHub} ]] &&	sed -i "s/blackcoinnl/${DockerHub}/" $0
 
 # Git Account
 
-defaultHubLab=${4:-github}
-read -p "Github or Gitlab? ($defaultHubLab): " HubLab
 HubLab=${HubLab:-${defaultHubLab}}
-if [ $HubLab != $defaultHubLab ]; then
-	sed -i "s|github|$HubLab|" ${BASE_DIR}/Dockerfile.ubase
-	sed -i "s|github|$HubLab|" $0
-fi
+[[ $HubLab != $defaultHubLab ]] && sed -i "s|github|${HubLab}|" ${BASE_DIR}/Dockerfile.ubase && sed -i "s|github|${HubLab}|" $0
 
-defaultRepo=${5:-CoinBlack}
-read -p "What is your GitAccount name? ($defaultRepo): " GitAccount
 GitAccount=${GitAccount:-${defaultRepo}}
-if [ ${GitAccount} != ${defaultRepo} ]; then
-	sed -i "s|CoinBlack|$GitAccount|" ${BASE_DIR}/Dockerfile.ubase
-	sed -i "s|CoinBlack|$GitAccount|" $0
-fi
+[[ ${GitAccount} != ${defaultRepo} ]] && sed -i "s|CoinBlack|$GitAccount|" ${BASE_DIR}/Dockerfile.ubase && sed -i "s|CoinBlack|$GitAccount|" $0
 
 # branch
 
-defaultBranch=${6:-v2.13.2.7}
-read -p "What branch/version? ($defaultBranch): " branch
 branch=${branch:-${defaultBranch}}
-if [ ${branch} != ${defaultBranch} ]; then
-	sed -i "s|ENV branch=v2.13.2.7|ENV branch=${branch}|" ${BASE_DIR}/Dockerfile.ubase
-	sed -i "s|v2.13.2.7|${branch}|" $0
-fi
+[[ ${branch} != ${defaultBranch} ]] && 	sed -i "s|ENV branch=v2.13.2.7|ENV branch=${branch}|" ${BASE_DIR}/Dockerfile.ubase && sed -i "s|v2.13.2.7|${branch}|" $0
 
 # timezone
-defaultTimezone=${7:-America/Los_Angeles}
-read -p "What is your timezone? (${defaultTimezone}): " timezone
-timezone=${timezone:-${defaultTimezone}}
-if [ ${timezone} != ${defaultTimezone} ]; then
-	sed -i "s|America/Los_Angeles|${timezone}|" ${BASE_DIR}/Dockerfile.ubase
-	sed -i "s|America/Los_Angeles|${timezone}|" ${BASE_DIR}/Dockerfile.ubuntu
-	sed -i "s|America/Los_Angeles|${timezone}|" $0
-fi
 
+timezone=${timezone:-${defaultTimezone}}
+[[ ${timezone} != ${defaultTimezone} ]] &&	sed -i "s|America/Los_Angeles|${timezone}|" ${BASE_DIR}/Dockerfile.ubase && \
+	sed -i "s|America/Los_Angeles|${timezone}|" ${BASE_DIR}/Dockerfile.ubuntu && sed -i "s|America/Los_Angeles|${timezone}|" $0
 
 echo "Architecture: ${architecture}"
 echo "DockerHub Account: ${DockerHub}"
